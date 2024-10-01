@@ -1,7 +1,7 @@
 import Peoples from "@/seed/peoples.json";
 import Image from "next/image";
 export async function generateStaticParams() {
-  return Peoples.data.topRecommenders.map((post) => ({
+  return Peoples.data.topRecommenders.slice(0,100).map((post) => ({
     slug: post.slug,
   }));
 }
