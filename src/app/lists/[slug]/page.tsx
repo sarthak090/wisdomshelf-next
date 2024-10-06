@@ -6,38 +6,83 @@ import BreadCrumb from "@/components/shared/BreadCrumb";
 export async function generateStaticParams() {
   const url = `${process.env.NEXT_PUBLIC_CMS_URL}/books-api/v1/lists`;
 
-  // fetch data
-  const lists = await fetch(url).then((res) => res.json());
-  return lists.lists.map((list: any) => ({
-    slug: list.slug,
-  }));
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch lists: ${response.statusText}`);
+    }
+
+    const lists = await response.json();
+    return lists.lists.map((list: any) => ({
+      slug: list.slug,
+    }));
+  } catch (error) {
+    console.error('Error fetching lists:', error);
+    return [];
+  }
 }
+
 type Props = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // read route params
   const url = `${process.env.NEXT_PUBLIC_CMS_URL}/books-api/v1/lists/${params.slug}`;
 
-  // fetch data
-  const list = await fetch(url).then((res) => res.json());
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch list: ${response.statusText}`);
+    }
 
-  // optionally access and extend (rather than replace) parent metadata
+    const list = await response.json();
 
-  return {
-    title: list.name,
-    openGraph: {
-      images: [list.books[0].thumbnail],
-    },
-  };
+    return {
+      title: list.name || 'Unknown List',
+      openGraph: {
+        images: list.books[0]?.thumbnail ? [list.books[0].thumbnail] : [],
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+    return {
+      title: 'Error',
+      openGraph: {
+        images: [],
+      },
+    };
+  }
 }
+
 export default async function Page({ params }: { params: { slug: string } }) {
   const url = `${process.env.NEXT_PUBLIC_CMS_URL}/books-api/v1/lists/${params.slug}`;
-  let list = await fetch(url).then((r) => r.json());
+  let list;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch list: ${response.statusText}`);
+    }
+
+    list = await response.json();
+
+    // Validate essential fields
+    if (!list.name || !list.books || list.books.length === 0) {
+      throw new Error('Invalid list data: Missing required fields.');
+    }
+  } catch (error) {
+    console.error('Error fetching list data:', error);
+    return (
+      <div className="text-center mt-8">
+        <h1 className="text-3xl font-bold">Error Loading Page</h1>
+        <p className="text-md text-red-500">{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -48,14 +93,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
           </h1>
           <div>
             <div>
-              <strong>Our Goal:</strong> Find the best {list.name} books
-              according to the internet (not just one random person's opinion).
+              <strong>Our Goal:</strong> Find the best {list.name} books according to the internet (not just one random person's opinion).
             </div>
             <div>
               <strong>Here's what we did:</strong>
               <ol className="list-decimal">
-                {list.what_we_did.slice(0,3).map((t:any) => (
-                  <li className="my-3">{t}</li>
+                {list.what_we_did && list.what_we_did.slice(0, 3).map((t: any, index: number) => (
+                  <li key={index} className="my-3">{t}</li>
                 ))}
               </ol>
             </div>
@@ -63,59 +107,66 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
         <div></div>
       </section>
+
       <BreadCrumb
-          loc={[
-            { label: "Lists", href: "/lists" },
-            { label: list.name, href: `/lists/${list.slug}` },
-          ]}
-        />
-      <section className="container px-12 mx-auto">       
-      
-         
+        loc={[
+          { label: "Lists", href: "/lists" },
+          { label: list.name, href: `/lists/${list.slug}` },
+        ]}
+      />
+
+      <section className="container px-12 mx-auto">
         <div>
           <section className="grid grid-cols-4 gap-8 my-8">
-            {list.books.map((book, i) => (
-              <a href={book.amazon_url}>
-                <div className="relative">
-                  <Image
-                    src={book.thumbnail.replace("-150x150", "")}
-                    className="rounded-lg"
-                    objectFit="contain"
-                    alt={book.name}
-                    width={200}
-                    height={380}
-                  />
+            {list.books.length > 0 ? (
+              list.books.map((book: any, i: number) => (
+                <a key={book.id} href={book.amazon_url}>
+                  <div className="relative">
+                    {book.thumbnail && (
+                      <Image
+                        src={book?.thumbnail?.replace("-150x150", "")}
+                        className="rounded-lg"
+                        objectFit="contain"
+                        alt={book.title || "No Title"}
+                        width={200}
+                        height={380}
+                      />
+                    )}
 
-                  <div className="styles_badge__NCtKL" data-eq="1">
-                    {i + 1}
+                    <div className="styles_badge__NCtKL" data-eq="1">
+                      {i + 1}
+                    </div>
                   </div>
-                </div>
-                <div className="mt-5">
-                  <div className="font-bold">{book.title}</div>
-                  <div className="text-gray-500">{book.author}</div>
-                  
-                </div>
-              </a>
-            ))}
+                  <div className="mt-5">
+                    <div className="font-bold">{book.title || "Untitled"}</div>
+                    <div className="text-gray-500">{book.author || "Unknown Author"}</div>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No books available.</p>
+            )}
           </section>
-
-
         </div>
-
-      
       </section>
-      <section>
-          <div className="text-center my-6 text-3xl font-bold">Sources</div>
-          <ol className="grid text-sm grid-cols-3 gap-8 list-decimal">
-            {list.sources.map((source)=>(
-              <li>
-                <p>{source.label}</p>
-                <a href={source.source_url.url} className="text-blue-500">{source.source_url.url}</a>
-              </li>
-            ))}
 
-          </ol>
-        </section>
+      <section>
+        <div className="text-center my-6 text-3xl font-bold">Sources</div>
+        <ol className="grid text-sm grid-cols-3 gap-8 list-decimal">
+          {list.sources?.length > 0 ? (
+            list.sources.map((source: any, index: number) => (
+              <li key={index}>
+                <p>{source.label || "No Label"}</p>
+                <a href={source.source_url?.url} className="text-blue-500">
+                  {source.source_url?.url || "No URL"}
+                </a>
+              </li>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 col-span-3">No sources available.</p>
+          )}
+        </ol>
+      </section>
     </div>
   );
 }
