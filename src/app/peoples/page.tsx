@@ -24,6 +24,8 @@ function Page() {
 
   return (
     <div>
+        <div className={'text-center text-4xl my-32 font-bold'}>Peoples</div>
+
       <main className='grid grid-cols-12 gap-4'>
         <aside className='border rounded-sm px-4 py-4 max-h-min col-span-2'>
           <div

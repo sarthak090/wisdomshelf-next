@@ -1,0 +1,13 @@
+.breadcrumbs li:not(:last-of-type):after {
+    margin-left: 4px;
+    content: ">";
+  }
+
+  .breadcrumbs li {
+    display: inline-flex;
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 400;
+    position: relative;
+    margin-right: 16px;
+  }
