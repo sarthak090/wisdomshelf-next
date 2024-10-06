@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata, ResolvingMetadata } from 'next'
 
 export async function generateStaticParams() {
-  return Peoples.data.topRecommenders.slice(0, 100).map((post) => ({
+  return Peoples.data.topRecommenders.slice(0, 30).map((post) => ({
     slug: post.slug,
   }));
 }
