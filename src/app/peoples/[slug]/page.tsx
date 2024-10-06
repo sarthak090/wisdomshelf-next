@@ -99,9 +99,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
             recommendations.map((recommendation: any) => (
               <div key={recommendation.book.id} className="flex items-center gap-2 justify-start border py-4 px-3 rounded-md">
                 <div className="flex-shrink-0">
-                  {recommendation.book.thumbnail && (
+                  {recommendation.book?.thumbnail && (
                     <Image
-                      src={recommendation.book.thumbnail}
+                      src={recommendation.book?.thumbnail}
                       alt={recommendation.book.title || "Book Image"}
                       className="rounded-md"
                       width={120}
