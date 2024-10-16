@@ -1,6 +1,14 @@
 import Peoples from "@/seed/peoples.json";
 import Image from "next/image";
 import type { Metadata, ResolvingMetadata } from 'next'
+import Recommendation from "@/components/pages/Home/People/Recommendation";
+import Written from "@/components/pages/Home/People/Written";
+import Books from "@/components/pages/Home/People/Books";
+import { CiInstagram } from "react-icons/ci";
+import { FaYoutube } from "react-icons/fa";
+import { FaGlobe } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaWikipediaW } from "react-icons/fa";
 
 export async function generateStaticParams() {
   return Peoples.data.topRecommenders.slice(0, 30).map((post) => ({
@@ -46,7 +54,7 @@ export async function generateMetadata(
 export default async function Page({ params }: { params: { slug: string } }) {
   const url = `${process.env.NEXT_PUBLIC_CMS_URL}/books-api/v1/peoples/${params.slug}`;
 
-  let people, recommendations;
+  let people, recommendations, written;
 
   try {
     const response = await fetch(url);
@@ -63,6 +71,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
     }
 
     recommendations = people.recommendations || [];
+    written = people.written|| []
+
   } catch (error) {
     console.error('Error fetching person data:', error);
     return (
@@ -72,10 +82,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </div>
     );
   }
+ 
 
   return (
     <div>
-      <section className="flex justify-center items-center gap-4 font-bold">
+      <section className="flex my-8 justify-center items-center gap-4 font-bold">
         <div className="flex justify-center">
           <Image
             src={people.featured_img}
@@ -90,47 +101,40 @@ export default async function Page({ params }: { params: { slug: string } }) {
             {people.name} Recommendations ({recommendations.length} Books)
           </h1>
           <p className="text-md" dangerouslySetInnerHTML={{ __html: people.bio || "No bio available" }}></p>
+          <div className="flex gap-3 items-center my-4">
+            <a href={people.social_links.insta_handle} target="_blank">
+
+            <CiInstagram className="size-6"/>
+
+            </a>
+            <a href={people.social_links.youtube_channel_link} target="_blank">
+
+            <FaYoutube className="size-6"/>
+            </a>
+
+            <a href={people.social_links.blog_link} target="_blank">
+
+            <FaGlobe className="size-6" />
+            </a>
+            <a href={people.social_links.twitter_handle} target="_blank">
+
+            <FaXTwitter className="size-6"/>
+            </a>
+            <a href={people.social_links.wikipedia_link} target="_blank">
+
+            <FaWikipediaW  className="size-6"/>
+</a>
+
+          </div>
         </div>
       </section>
 
+     
+
       <section className="my-8">
-        <div className="grid grid-cols-2 gap-5">
-          {recommendations.length > 0 ? (
-            recommendations.map((recommendation: any) => (
-              <div key={recommendation.book.id} className="flex items-center gap-2 justify-start border py-4 px-3 rounded-md">
-                <div className="flex-shrink-0">
-                  {recommendation.book?.thumbnail && (
-                    <Image
-                      src={recommendation.book?.thumbnail}
-                      alt={recommendation.book.title || "Book Image"}
-                      className="rounded-md"
-                      width={120}
-                      height={100}
-                    />
-                  )}
-                </div>
-                <div>
-                  <p className="text-xl font-semibold mb-2">
-                    {recommendation.book.title || "Untitled"}
-                  </p>
-                  <p className="text-gray-500">
-                    {recommendation.book.subtitle || "No subtitle"}
-                  </p>
-                  <p className="text-xs text-gray-500 mb-2">
-                    {recommendation.book.author || "Unknown author"}
-                  </p>
-                  <div className="text-md">
-                    <span className="font-bold">Source:</span>
-                    <span className="italic">{recommendation.source || "Unknown"}</span>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">No recommendations available.</p>
-          )}
-        </div>
+        <Books  recommendations={recommendations} written={written} people={people}  />
       </section>
+      
     </div>
   );
 }
