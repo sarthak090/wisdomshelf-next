@@ -85,8 +85,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div>
-      <section className="grid py-8 grid-cols-2">
+    <div >
+      <section className="grid py-8 lg:grid-cols-2">
         <div className="grid gap-5">
           <h1 className="lg:text-5xl font-bold">
             {list.books.length} Best {list.name} Books of All Time
@@ -97,7 +97,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </div>
             <div>
               <strong>Here's what we did:</strong>
-              <ol className="list-decimal">
+              <ol className="list-decimal ml-8">
                 {list.what_we_did && list.what_we_did.slice(0, 3).map((t: any, index: number) => (
                   <li key={index} className="my-3">{t}</li>
                 ))}
@@ -115,13 +115,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
         ]}
       />
 
-      <section className="container px-12 mx-auto">
+      <section className="container px-2 lg:px-12 mx-auto">
         <div>
-          <section className="grid grid-cols-4 gap-8 my-8">
+          <section className="grid  lg:grid-cols-4 gap-8 my-8">
             {list.books.length > 0 ? (
               list.books.map((book: any, i: number) => (
                 <a key={book.id} href={book.amazon_url}>
-                  <div className="relative">
+                  <div className="relative flex justify-center">
                     {book.thumbnail && (
                       <Image
                         src={book?.thumbnail?.replace("-150x150", "")}
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
       <section>
         <div className="text-center my-6 text-3xl font-bold">Sources</div>
-        <ol className="grid text-sm grid-cols-3 gap-8 list-decimal">
+        <ol className="grid text-sm lg:grid-cols-3 gap-8 list-decimal">
           {list.sources?.length > 0 ? (
             list.sources.map((source: any, index: number) => (
               <li key={index}>

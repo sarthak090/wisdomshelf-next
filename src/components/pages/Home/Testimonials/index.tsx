@@ -44,7 +44,7 @@ export default function Testimonials() {
   return (
     <div className="bg-gray-200 py-16 my-8 px-12">
       <section>
-        <div className="text-center text-3xl lg:text-5xl font-bold text-blue-500">
+        <div className="text-center text-3xl lg:text-5xl font-bold text-primary">
           What Our Readers Say
         </div>
         <Swiper
@@ -70,8 +70,8 @@ export default function Testimonials() {
           }}
         >
           {" "}
-          {t.map((testimonial) => (
-            <SwiperSlide>
+          {t.map((testimonial,i) => (
+            <SwiperSlide key={i}>
               <div className="flex flex-col items-center justify-center">
                 <p className="text-center mb-4 italic">{testimonial.review}</p>
                 <div className="flex gap-4 items-center ">
@@ -90,7 +90,7 @@ export default function Testimonials() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-blue-500 font-semibold">
+                    <div className="text-primary font-semibold">
                       {testimonial.name}
                     </div>
                     <div>{testimonial.role}</div>

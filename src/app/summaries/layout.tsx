@@ -7,7 +7,7 @@ export default function DashboardLayout({
   }) {
     return (
       <>
-      <section className="container px-12 mx-auto">
+      <section className="container px-4 lg:px-12 mx-auto">
 
        
    

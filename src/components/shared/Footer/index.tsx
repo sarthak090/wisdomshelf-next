@@ -36,10 +36,9 @@ function Footer() {
       href: "/meet-the-team",
     },
     {
-      label: "Privacy Poilicy",
-      href: "/gifts",
+      label: "Privacy Policy",
+      href: "/privacy-policy",
     },
-
     {
       label: "Terms of Service",
       href: "/terms-of-service",
@@ -49,11 +48,12 @@ function Footer() {
       href: "/cookie-policy-gdpr",
     },
   ];
+
   return (
-    <footer className="bg-gray-100 px-12 py-4 mt-16">
-      <div className="grid grid-cols-3 items-center mt-10">
-        <div>
-          <div className="flex items-center gap-2">
+    <footer className="bg-gray-100 px-6 py-6 mt-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 items-center mt-10 gap-6">
+        <div className="text-center md:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-2">
             <Link href={"/"}>
               <Image
                 src={"/img/logo.png"}
@@ -70,33 +70,36 @@ function Footer() {
             </Link>
           </div>
         </div>
-        <div className="flex font-semibold gap-8">
+
+        <div className="flex justify-center md:justify-start font-semibold gap-6 md:gap-8">
           {nav.map((n) => (
-            <Link key={Math.random()} href={n.href}>
+            <Link key={n.href} href={n.href}>
               {n.label}
             </Link>
           ))}
         </div>
-        <div className="flex justify-end">
+
+        <div className="flex justify-center md:justify-end">
           <form method="GET" action={"/search"}>
-            <div>
-              <input
-                type="text"
-                placeholder="Search"
-                className="p-2 border outline-none"
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Search"
+              className="p-2 border outline-none w-full md:w-auto"
+            />
           </form>
         </div>
       </div>
-      <div className="flex gap-3 justify-center items-center border-t-[1px] border-b-[1px] py-3 text-gray-600">
+
+      <div className="flex flex-wrap gap-3 justify-center items-center border-t-[1px] border-b-[1px] py-3 text-gray-600 mt-4">
         {nav2.map((t) => (
-          <Link href={t.href}>{t.label}</Link>
+          <Link key={t.href} href={t.href}>
+            {t.label}
+          </Link>
         ))}
       </div>
 
-      <div className="flex gap-3 justify-center text-center py-3 text-gray-600">
-        <p>
+      <div className="flex justify-center text-center py-3 text-gray-600">
+        <p className="max-w-2xl px-4">
           Wisdom Shelf is a participant in the Amazon Services LLC Associates
           Program, an affiliate advertising program designed to provide a means
           for sites to earn advertising fees by advertising and linking to
@@ -105,7 +108,7 @@ function Footer() {
       </div>
 
       <div className="text-center text-sm text-gray-400 border-t-[1px] mt-8 py-4">
-        © 2024 Wisdom Shelf All rights reserved.
+        © 2024 Wisdom Shelf. All rights reserved.
       </div>
     </footer>
   );

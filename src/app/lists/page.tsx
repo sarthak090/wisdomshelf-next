@@ -1,6 +1,4 @@
-"use client";
-import { useState } from "react";
-import Peoples from "@/seed/peoples.json";
+
 import Link from "next/link";
 async function getLists() {
   const url = `${process.env.NEXT_PUBLIC_CMS_URL}/books-api/v1/lists-genres/`;
@@ -8,6 +6,9 @@ async function getLists() {
  
   return data;
 }
+export const metadata = {
+  title: "List",
+};
 async function Page() {
   const data = await getLists();
   const  lists  = data;
@@ -23,7 +24,7 @@ async function Page() {
               {list.category.name}
             </div>
             <hr className="py-3" />
-            <div className="grid  grid-cols-3 gap-6 my-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-4">
             {list.posts.map((p)=>(
             <Link href={`/lists/${p.slug}`}>{p.title}</Link>
 

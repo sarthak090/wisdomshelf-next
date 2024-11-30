@@ -41,14 +41,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div>
-      <h1
-        className="text-4xl font-bold my-8"
-        dangerouslySetInnerHTML={{ __html: summaries.title }}
-      />
+    
 
-      <div className="grid grid-cols-12">
-        <div className="grid col-span-4">
-          <div className="">
+      <div className="grid my-8 grid-cols-1  lg:grid-cols-12">
+        <div className="flex justify-center w-full  col-span-3  ">
+          <div className="flex justify-center">
             <Image
               src={summaries.book.thumbnail.replace("-150x150", "")}
               className="rounded-lg"
@@ -59,10 +56,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
             />
           </div>
         </div>
-        <div className=" col-span-8">
+        <div className="  col-span-9 pl-2">
           <div className=" mt-8">
-            <span className="font-semibold">Description</span>
-            <p className="my-8">{summaries.description}</p>
+          <h1
+        className="text-5xl font-bold mb-4"
+        dangerouslySetInnerHTML={{ __html: summaries.title }}
+      />
+            <span className="font-bold">Description</span>
+            <p className="my-8 text-[19px] text-gray-500"> 
+            <span dangerouslySetInnerHTML={{__html:summaries.description}}/>
+            </p>
+            <p className="italic text-sm text-gray-500">P.S.: As an Amazon Associate, we earn money from purchases made through links in this page. But the summaries are totally free!
+
+</p>
           </div>
         </div>
       </div>
@@ -73,19 +79,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
           { label: summaries.title, href: `/summaries/${summaries.slug}` },
         ]}
       />
-      <section className="grid gap-4 grid-cols-12">
-        <div className="col-span-3 sticky  bg-gray-100 rounded-lg px-2">
+      <section className="grid gap-4  grid-cols-1 lg:grid-cols-12">
+        <div className="col-span-3 hidden lg:block sticky  bg-gray-100 rounded-lg px-2">
           <div className="grid px-2">
-            {summaries.chapters.map((c) => (
-              <a className="capitalize my-2 font-semibold top-[20px]" href={`#${c.title}`}>
+            {summaries.chapters.map((c,i) => (
+              <a key={i} className="capitalize my-2 hover:translate-x-3 transition-all delay-150 top-[20px]" href={`#${c.title}`}>
                 {c.title}
               </a>
             ))}
           </div>
         </div>
         <div className="col-span-9">
-          {summaries.chapters.map((chapter) => (
-            <div className="my-6">
+          {summaries.chapters.map((chapter,i) => (
+            <div className="my-6" key={i}>
               <div
                 className="text-3xl capitalize mb-4 font-bold"
                 id={chapter.title}

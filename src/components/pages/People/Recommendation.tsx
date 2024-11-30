@@ -24,9 +24,9 @@ export default function Recommendation(props) {
                 )}
               </div>
               <div>
-                <p className="text-xl font-semibold mb-2">
-                  {recommendation.book?.title || "Untitled"}
-                </p>
+                <p className="text-xl font-semibold mb-2" dangerouslySetInnerHTML={{__html:recommendation.book?.title || "Untitled"}} />
+                  
+              
                 <p className="text-gray-500">
                   {recommendation.book?.subtitle || "No subtitle"}
                 </p>

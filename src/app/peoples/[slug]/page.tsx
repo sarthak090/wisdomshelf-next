@@ -1,9 +1,9 @@
 import Peoples from "@/seed/peoples.json";
 import Image from "next/image";
 import type { Metadata, ResolvingMetadata } from 'next'
-import Recommendation from "@/components/pages/Home/People/Recommendation";
-import Written from "@/components/pages/Home/People/Written";
-import Books from "@/components/pages/Home/People/Books";
+import Recommendation from "@/components/pages/People/Recommendation";
+import Written from "@/components/pages/People/Written";
+import Books from "@/components/pages/People/Books";
 import { CiInstagram } from "react-icons/ci";
 import { FaYoutube } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa";
