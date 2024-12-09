@@ -14,7 +14,7 @@ export default function Vison() {
         into the habits that fuel their success.
       </p>
       <button className="my-3 px-8 py-3  bg-primary text-white rounded-lg">
-        <Link href={'/'}>
+        <Link href={'/peoples'}>
         View More </Link></button>
     </div>
   );

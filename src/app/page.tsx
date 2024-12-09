@@ -17,6 +17,10 @@ async function getData() {
     posts: posts,
   };
 }
+export const metadata={
+  title:'Wisdom Shelf- Dive into the brains of prominent people to discover their recommended books, routines, & rituals.',
+  description:'Dive into the brains of prominent people to discover their recommended books, routines, & rituals. 500+ experts, 1500+ series, 1000+ […]'
+}
 export default async function Home() {
   const { series, posts } = await getData();
 

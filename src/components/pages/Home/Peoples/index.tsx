@@ -9,6 +9,7 @@ function index() {
 </p>
        <div className='grid grid-cols-2 gap-2 lg:grid-cols-4 my-8'>
         {peoples.map((people)=>(
+            <Link href={`/peoples/`+people.slug}>
             <div key={Math.random()} className='flex flex-col items-center'>
                 <Image src={people.imageUrl300} alt={people.name} height={150} width={150} className='rounded-full'/>
                 <div className='flex justify-center flex-col items-center'>
@@ -16,6 +17,8 @@ function index() {
                     <p className=''>{people.booksCount} Books</p>
                 </div>
             </div>
+
+            </Link>
         ))}
        </div>
        <Link className='text-center text-primary' href={'/peoples'}>See all People   
